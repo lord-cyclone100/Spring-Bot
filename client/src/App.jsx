@@ -1,14 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import axios from 'axios'
 import { BACKEND_URL } from './config'
 import { Navbar } from './components/Navbar'
+import ReactMarkdown from 'react-markdown'
 
 export const App = () => {
   const [prompt, setPrompt] = useState("")
   const [serverResponse, setServerResponse] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [chatHistory, setChatHistory] = useState([])
+  const chatMessagesRef = useRef(null)
+
+  // Auto-scroll to bottom when new messages are added
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight
+    }
+  }, [chatHistory, isLoading])
 
   const handleFormInput = (e) => {
     setPrompt(e.target.value)
@@ -63,7 +72,7 @@ export const App = () => {
             )}
           </div>
           
-          <div className="chat-messages">
+          <div className="chat-messages" ref={chatMessagesRef}>
             {chatHistory.length === 0 ? (
               <div className="welcome-message">
                 <div className="welcome-icon">
@@ -83,7 +92,11 @@ export const App = () => {
                     )}
                   </div>
                   <div className="message-content">
-                    <p>{message.message}</p>
+                    {message.type === 'bot' ? (
+                      <ReactMarkdown>{message.message}</ReactMarkdown>
+                    ) : (
+                      <p>{message.message}</p>
+                    )}
                   </div>
                 </div>
               ))
