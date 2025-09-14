@@ -22,7 +22,7 @@ public class ChatController {
     public Response sendMessage(@RequestBody Request request){
         String userMessage = request.getPrompt();
 
-        String response = generateResponse(userMessage);
+        String response = ChatController.generateResponse(userMessage);
         String responseMessage = response;
         return new Response(responseMessage);
     }
