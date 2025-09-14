@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import './App.css'
+import './App.scss'
 import axios from 'axios'
 import { BACKEND_URL } from './config'
 import { Navbar } from './components/Navbar'
